@@ -7,6 +7,7 @@ const {AllHtmlEntities} = require('html-entities'),
     moment = require('moment'),
     Excel = require('excel4node'),
     entities = new AllHtmlEntities(),
+    success = true,
 
 
 /* Functions */
@@ -166,6 +167,60 @@ const {AllHtmlEntities} = require('html-entities'),
         }
     };
 
+    // uploadFile = ({
+    //     name = undefined,
+    //     /* 10mb */
+    //     limit = 10,
+    //     allowedFormat = undefined,
+    //     location
+    // })=>{
+    //     /* Set storage to disk*/
+    //     const storage = multer.diskStorage({
+    //       destination: function(req, file, cb) {
+    //         cb(null, location);
+    //       },
+    //       filename: (req, file, cb) => {
+    //         let mimetype = file.mimetype.split('/')[1];
+
+    //         name = name ? 
+    //             name+`.${mimetype}` 
+    //             :`${uniqueString()}.${mimetype}`;
+      
+    //         cb(null, name);
+    //       },
+    //     });
+      
+    //     /* Limit is converted to bytes from megabyte */
+    //     const limits = { fileSize: limit * 1000000 };
+      
+    //     /* Restrict file format to allowed ones */
+    //     let fileFilter = undefined;
+    //     if(allowedFormat){
+    //         fileFilter = (req, file, cb) => {
+    //             if (
+    //               allowedFormat.includes(
+    //                 file.originalname
+    //                   .split('.')
+    //                   .pop()
+    //                   .toLowerCase()
+    //               )
+    //             ) {
+    //               return cb(null, true);
+    //             } else {
+    //               return cb(
+    //                 `File format not allowed, allowed formats are: ${allowedFormat.join(
+    //                   ', '
+    //                 )}`
+    //               );
+    //             }
+    //         };
+    //     }
+        
+    //     const output = {storage, limits};
+    //     Boolean(fileFilter) && (output.fileFilter = fileFilter);
+    //     return multer(output);
+    // }
+
 
 module.exports = {
     slugify,
@@ -180,5 +235,6 @@ module.exports = {
     readJson,
     uniqueString,
     date,
-    toExcel
+    toExcel,
+    success
 };
