@@ -7,9 +7,8 @@ const {AllHtmlEntities} = require('html-entities'),
     moment = require('moment'),
     Excel = require('excel4node'),
     entities = new AllHtmlEntities(),
-    pdfKit = require("pdfkit"),
     multer = require('multer'),
-    unlink = require('fs').unlink;
+    {access,unlink} = require('fs');
 
 const randomString = (N=10)=>{
     return Array(N + 1)
@@ -18,12 +17,20 @@ const randomString = (N=10)=>{
   };
  
 const deleteFile = async (file)=>{
-    return new Promise((resolve, reject) => {
-      unlink(file, err => {
-        return err ? reject(err) : resolve(true);
+    if(await fileExists(file)){
+      return new Promise((resolve, reject) => {
+        unlink(file, err => {
+          return err ? reject(err) : resolve(true);
+        });
       });
-    });
+    } return false;
   };
+
+const fileExists = async (file)=>{
+  if(await access(file))
+    return true;
+  return false;
+}
 
 const removeUpload = async(files)=>{
     if(Array.isArray(files)){
@@ -133,6 +140,7 @@ module.exports = {
   decrypt,
   errorMessage,
   deleteFile,
+  fileExists,
   removeUpload,
   slugify : (value,lowerCase=true)=>{
       return lowerCase ? Slugify(value).toLowerCase() : Slugify(value);
