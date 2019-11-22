@@ -8,7 +8,7 @@ const {AllHtmlEntities} = require('html-entities'),
     Excel = require('excel4node'),
     entities = new AllHtmlEntities(),
     multer = require('multer'),
-    {access,unlink} = require('fs');
+    {access,unlink,F_OK} = require('fs');
 
 const randomString = (N=10)=>{
     return Array(N + 1)
@@ -26,10 +26,13 @@ const deleteFile = async (file)=>{
     } return false;
   };
 
-const fileExists = async (file)=>{
-  if(await access(file))
-    return true;
-  return false;
+const fileExists = (file)=>{
+  return new Promise((resolve,reject)=>{
+    access(file,F_OK,(err)=>{
+      if(err) resolve(false);
+      resolve(true);
+    })
+  });
 }
 
 const removeUpload = async(files)=>{

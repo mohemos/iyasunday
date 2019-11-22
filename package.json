@@ -1,11 +1,12 @@
 {
   "name": "iyasunday",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "Utility for node.js developers",
   "main": "index.js",
   "scripts": {
     "format": "prettier --single-quote --print-width 80 --trailing-comma es5 --write \"app/**/*.js\"",
-    "test": "jest"
+    "test": "jest",
+    "dev": "nodemon test"
   },
   "repository": "https://github.com/mohemos/iyasunday.git",
   "author": "Moses Peter",
