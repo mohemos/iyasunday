@@ -135,7 +135,7 @@ module.exports = {
   deleteFile,
   removeUpload,
   slugify : (value,lowerCase=true)=>{
-      return lowerCase ? Slugify(value).toLowerCase() : Slugify(value);
+      return lowerCase ? Slugify(value, {remove: /[*+~.()%&'"!:@]/g}).toLowerCase() : Slugify(value, {remove: /[*+~.()%&'"!:@]/g});
   },
 
   htmlEncode : (value)=>{
