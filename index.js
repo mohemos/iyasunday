@@ -146,8 +146,19 @@ module.exports = {
   fileExists,
   removeUpload,
   slugify : (value,lowerCase=true)=>{
-      return lowerCase ? Slugify(value).toLowerCase() : Slugify(value);
+    if(lowerCase)
+      return Slugify(value, {
+        remove: /[*+~.()%&'"!:@]/g,
+        lower : true
+      });
+
+    return Slugify(value, {
+      remove: /[*+~.()%&'"!:@]/g,
+      lower : true
+    });
   },
+
+
 
   htmlEncode : (value)=>{
       return entities.encodeNonUTF(value);
@@ -290,5 +301,12 @@ module.exports = {
       offset :  currentPage > 1 ? previousPage * perPage : 0
     };
   },
+  
+  isAjaxRequest : (xhr,headers=null)=>{
+    if(xhr) return true;
+    else if(headers && headers.accept.indexOf('json') > -1)
+      return true;
+    return false;
+  }
 
 };
