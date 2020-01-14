@@ -8,7 +8,8 @@ const {AllHtmlEntities} = require('html-entities'),
     Excel = require('excel4node'),
     entities = new AllHtmlEntities(),
     multer = require('multer'),
-    {access,unlink,F_OK} = require('fs');
+    {access,unlink,F_OK} = require('fs'),
+    jwt = require('jsonwebtoken');
 
 const randomString = (N=10)=>{
     return Array(N + 1)
@@ -25,6 +26,16 @@ const deleteFile = async (file)=>{
       });
     } return false;
   };
+
+const decodeJwt = (headerToken)=>{
+  const token = headerToken.split(' ').pop();
+  return new Promise((ful, rej) => {
+    jwt.verify(token, process.env.APP_KEY, (err, data) => {
+      if (err) rej(err);
+      return ful(data);
+    });
+  });
+}
 
 const fileExists = (file)=>{
   return new Promise((resolve,reject)=>{
@@ -54,7 +65,7 @@ const uniqueString = (capitalize=false)=>{
     return capitalize ? result.toUpperCase() : result;
   };
 
-const errorMessage = (err = void 0)=>{
+const errorMessage = (err = void 0,ERROR_TYPE=undefined)=>{
     let message;
     if (err && err.errors) {
       message = err.errors[0].message;
@@ -71,7 +82,9 @@ const errorMessage = (err = void 0)=>{
       console.log(err);
       console.log("=======================================");
     }
-    return { success: false, message, data:[] };
+    const response = { success: false, message};
+    if(ERROR_TYPE) response.error = ERROR_TYPE;
+    return response;
 };
 
 const decrypt=(cipherText,secret)=>{
@@ -143,6 +156,7 @@ module.exports = {
   decrypt,
   errorMessage,
   deleteFile,
+  decodeJwt,
   fileExists,
   removeUpload,
   slugify : (value,lowerCase=true)=>{
