@@ -68,7 +68,7 @@ const uniqueString = (capitalize=false)=>{
 const errorMessage = (err = void 0,ERROR_TYPE=undefined)=>{
     let message;
     if (err && err.errors) {
-      message = err.errors[0].message;
+      message = err.errors[0] ? err.errors[0].message : "Something went wrong.";
     } else if (err && err.message) {
       message = err.message;
     } else if (typeof err == 'string') {
