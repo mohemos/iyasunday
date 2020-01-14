@@ -184,7 +184,7 @@ module.exports = {
 
   /* Display success message */
   successMessage : (message)=>{
-      return { success: true, message, data:[] };
+      return { success: true, message};
   },
 
   /* Make a get request */
