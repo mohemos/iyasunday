@@ -201,7 +201,7 @@ module.exports = {
       
           return result.data;
       } catch (err) {
-          throw err.response ? err.response.data || err.response : err;
+        throw err.response ? {...err.response.data, statusCode:err.response.status} || err.response : err;
       }
   },
 
@@ -220,7 +220,7 @@ module.exports = {
     
         return result.data;
       } catch (err) {
-        throw err.response ? err.response.data || err.response : err;
+        throw err.response ? {...err.response.data, statusCode:err.response.status} || err.response : err;
       }
   },
 
