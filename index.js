@@ -7,23 +7,44 @@ const {AllHtmlEntities} = require('html-entities'),
     moment = require('moment'),
     Excel = require('excel4node'),
     entities = new AllHtmlEntities(),
-    pdfKit = require("pdfkit"),
     multer = require('multer'),
-    unlink = require('fs').unlink;
+    {access,unlink,F_OK} = require('fs'),
+    jwt = require('jsonwebtoken');
 
 const randomString = (N=10)=>{
     return Array(N + 1)
       .join((Math.random().toString(36) + '00000000000000000').slice(2, 18))
       .slice(0, N);
   };
-
+ 
 const deleteFile = async (file)=>{
-    return new Promise((resolve, reject) => {
-      unlink(file, err => {
-        return err ? reject(err) : resolve(true);
+    if(await fileExists(file)){
+      return new Promise((resolve, reject) => {
+        unlink(file, err => {
+          return err ? reject(err) : resolve(true);
+        });
       });
-    });
+    } return false;
   };
+
+const decodeJwt = (headerToken)=>{
+  const token = headerToken.split(' ').pop();
+  return new Promise((ful, rej) => {
+    jwt.verify(token, process.env.APP_KEY, (err, data) => {
+      if (err) rej(err);
+      return ful(data);
+    });
+  });
+}
+
+const fileExists = (file)=>{
+  return new Promise((resolve,reject)=>{
+    access(file,F_OK,(err)=>{
+      if(err) resolve(false);
+      resolve(true);
+    })
+  });
+}
 
 const removeUpload = async(files)=>{
     if(Array.isArray(files)){
@@ -44,10 +65,10 @@ const uniqueString = (capitalize=false)=>{
     return capitalize ? result.toUpperCase() : result;
   };
 
-const errorMessage = (err = void 0)=>{
+const errorMessage = (err = void 0,ERROR_TYPE=undefined)=>{
     let message;
     if (err && err.errors) {
-      message = err.errors[0].message;
+      message = err.errors[0] ? err.errors[0].message : "Something went wrong.";
     } else if (err && err.message) {
       message = err.message;
     } else if (typeof err == 'string') {
@@ -61,7 +82,9 @@ const errorMessage = (err = void 0)=>{
       console.log(err);
       console.log("=======================================");
     }
-    return { success: false, message, data:[] };
+    const response = { success: false, message};
+    if(ERROR_TYPE) response.error = ERROR_TYPE;
+    return response;
 };
 
 const decrypt=(cipherText,secret)=>{
@@ -133,10 +156,23 @@ module.exports = {
   decrypt,
   errorMessage,
   deleteFile,
+  decodeJwt,
+  fileExists,
   removeUpload,
   slugify : (value,lowerCase=true)=>{
-      return lowerCase ? Slugify(value, {remove: /[*+~.()%&'"!:@]/g}).toLowerCase() : Slugify(value, {remove: /[*+~.()%&'"!:@]/g});
+    if(lowerCase)
+      return Slugify(value, {
+        remove: /[*+~.()%&'"!:@]/g,
+        lower : true
+      });
+
+    return Slugify(value, {
+      remove: /[*+~.()%&'"!:@]/g,
+      lower : true
+    });
   },
+
+
 
   htmlEncode : (value)=>{
       return entities.encodeNonUTF(value);
@@ -148,7 +184,7 @@ module.exports = {
 
   /* Display success message */
   successMessage : (message)=>{
-      return { success: true, message, data:[] };
+      return { success: true, message};
   },
 
   /* Make a get request */
@@ -165,7 +201,7 @@ module.exports = {
       
           return result.data;
       } catch (err) {
-          throw err.response ? err.response.data || err.response : err;
+        throw err.response ? {...err.response.data, httpStatusCode:err.response.status} || err.response : err;
       }
   },
 
@@ -184,7 +220,7 @@ module.exports = {
     
         return result.data;
       } catch (err) {
-        throw err.response ? err.response.data || err.response : err;
+        throw err.response ? {...err.response.data, httpStatusCode:err.response.status} || err.response : err;
       }
   },
 
@@ -279,5 +315,12 @@ module.exports = {
       offset :  currentPage > 1 ? previousPage * perPage : 0
     };
   },
+  
+  isAjaxRequest : (xhr,headers=null)=>{
+    if(xhr) return true;
+    else if(headers && headers.accept.indexOf('json') > -1)
+      return true;
+    return false;
+  }
 
 };
