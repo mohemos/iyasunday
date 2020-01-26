@@ -9,13 +9,22 @@ const {AllHtmlEntities} = require('html-entities'),
     entities = new AllHtmlEntities(),
     multer = require('multer'),
     {access,unlink,F_OK} = require('fs'),
-    jwt = require('jsonwebtoken');
+    jwt = require('jsonwebtoken'),
+    {createHash} = require('crypto'),
+    ERRORS = require('./error');
+
 
 const randomString = (N=10)=>{
     return Array(N + 1)
       .join((Math.random().toString(36) + '00000000000000000').slice(2, 18))
       .slice(0, N);
   };
+
+const md5 = (plainText=Date.now().toString())=>{
+  return createHash('md5')
+    .update(plainText)
+    .digest('hex');
+}
  
 const deleteFile = async (file)=>{
     if(await fileExists(file)){
@@ -65,7 +74,7 @@ const uniqueString = (capitalize=false)=>{
     return capitalize ? result.toUpperCase() : result;
   };
 
-const errorMessage = (err = void 0,ERROR_TYPE=undefined)=>{
+  const errorMessage = (err = void 0,ERROR_TYPE='FATAL_ERROR')=>{
     let message;
     if (err && err.errors) {
       message = err.errors[0] ? err.errors[0].message : "Something went wrong.";
@@ -83,9 +92,10 @@ const errorMessage = (err = void 0,ERROR_TYPE=undefined)=>{
       console.log("=======================================");
     }
     const response = { success: false, message};
-    if(ERROR_TYPE) response.error = ERROR_TYPE;
+    response.error = err.name || ERROR_TYPE;
+    if (err.httpStatusCode) response.httpStatusCode = err.httpStatusCode;
     return response;
-};
+  };
 
 const decrypt=(cipherText,secret)=>{
     const crypto = new cryptr(secret);
@@ -159,6 +169,14 @@ module.exports = {
   decodeJwt,
   fileExists,
   removeUpload,
+  md5,
+  InvalidTokenError:ERRORS.InvalidTokenError, 
+  TokenExpiredError : ERRORS.TokenExpiredError, 
+  AuthenticationError : ERRORS.AuthenticationError, 
+  AuthorizationError : ERRORS.AuthorizationError,
+  EntryExistError : ERRORS.EntryExistError, 
+  EntryNotFoundError : ERRORS.EntryNotFoundError,
+  ValidationError : ERRORS.ValidationError,
   slugify : (value,lowerCase=true)=>{
     if(lowerCase)
       return Slugify(value, {
@@ -322,5 +340,6 @@ module.exports = {
       return true;
     return false;
   }
+
 
 };
