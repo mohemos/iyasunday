@@ -93,7 +93,12 @@ const uniqueString = (capitalize=false)=>{
     }
     const response = { success: false, message};
     response.error = err.name || ERROR_TYPE;
-    if (err.httpStatusCode) response.httpStatusCode = err.httpStatusCode;
+    if (err.httpStatusCode) {
+      response.code = err.httpStatusCode;
+      response.httpStatusCode = err.httpStatusCode;
+    } else{
+      response.code=500;
+    }
     return response;
   };
 
@@ -120,6 +125,7 @@ const uploadFile = ({
   allowedFormat = ['jpg','jpeg','png','gif'], 
   location 
 }) => {
+  if(location && process.env.STORAGE_PATH)location=process.env.STORAGE_PATH+location;
   /* Set storage to s3 */
   const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -136,6 +142,7 @@ const uploadFile = ({
 
   /* Restrict file format to allowed ones */
   const fileFilter = (req, file, cb) => {
+    if(allowedFormat.length === 0) return cb(null,true);
     if (
       allowedFormat.includes(
         file.originalname
@@ -176,17 +183,19 @@ module.exports = {
   AuthorizationError : ERRORS.AuthorizationError,
   EntryExistError : ERRORS.EntryExistError, 
   EntryNotFoundError : ERRORS.EntryNotFoundError,
+  NotFoundError : ERRORS.EntryNotFoundError,
+  ExistsError : ERRORS.EntryExistError,
   ValidationError : ERRORS.ValidationError,
   slugify : (value,lowerCase=true)=>{
     if(lowerCase)
       return Slugify(value, {
-        remove: /[*+~.()%&'"!:@]/g,
+        remove: /[*,`^#+~.()%&'"!:@]/g,
         lower : true
       });
 
     return Slugify(value, {
-      remove: /[*+~.()%&'"!:@]/g,
-      lower : true
+      remove: /[*,`^#+~.()%&'"!:@]/g,
+      lower : false
     });
   },
 
