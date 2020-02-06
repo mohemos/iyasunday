@@ -102,16 +102,17 @@ const uniqueString = (capitalize=false)=>{
     return response;
   };
 
-const decrypt=(cipherText,secret)=>{
-    const crypto = new cryptr(secret);
+  const decrypt=(cipherText,secret)=>{
+    let crypto = new cryptr(secret);
+      crypto = crypto.decrypt(cipherText);
+      if(!crypto) throw new ERRORS.ValidationError("Supplied token not valid");    
   
-    let { plainText, expire = void 0 } = JSON.parse(crypto.decrypt(cipherText));
-  
-    if (expire && Date.now() > expire) {
-      throw new Error('Authentication token expired');
-    }
-  
-    return plainText;
+      let { plainText, expire = void 0 } = JSON.parse(crypto);
+    
+      if (expire && Date.now() > expire) {
+        throw new Error('Authentication token expired');
+      }
+      return plainText;
   };
 
 const rand = (min=0,max=10000)=>{

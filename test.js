@@ -4,5 +4,4 @@ const express = require('express'),
 
     console.log(slugify("Moses peter,-,,,` &*()oladel",true));
     
-
 app.listen(9000,()=>console.log("Iya sunday now running "+randomString(10)))
