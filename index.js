@@ -180,12 +180,12 @@ module.exports = {
   slugify : (value,lowerCase=true)=>{
     if(lowerCase)
       return Slugify(value, {
-        remove: /[*+~.()%&'"!:@]/g,
+        remove: /[*+~.()%,&'"!:@\/]/g,
         lower : true
       });
 
     return Slugify(value, {
-      remove: /[*+~.()%&'"!:@]/g,
+      remove: /[*+~.()%,&'"!:@\/]/g,
       lower : true
     });
   },
