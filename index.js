@@ -76,15 +76,11 @@ const uniqueString = (capitalize=false)=>{
 
   const errorMessage = (err = void 0,ERROR_TYPE='FATAL_ERROR')=>{
     let message;
-    if (err && err.errors) {
+    if (err && err.errors) 
       message = err.errors[0] ? err.errors[0].message : "Something went wrong.";
-    } else if (err && err.message) {
-      message = err.message;
-    } else if (typeof err == 'string') {
-      message = err;
-    } else {
-      message = 'Something went wrong';
-    }
+    else if (err && err.message) message = err.message;
+    else if (typeof err == 'string') message = err;
+    else message = 'Something went wrong';
     
     if(process.env.NODE_ENV !== "production"){
       console.log("=======================================");
@@ -93,25 +89,19 @@ const uniqueString = (capitalize=false)=>{
     }
     const response = { success: false, message};
     response.error = err.name || ERROR_TYPE;
-    if (err.httpStatusCode) {
-      response.code = err.httpStatusCode;
-      response.httpStatusCode = err.httpStatusCode;
-    } else{
-      response.code=500;
-    }
+    if (err.httpStatusCode) response.httpStatusCode = err.httpStatusCode;
     return response;
   };
 
   const decrypt=(cipherText,secret)=>{
     let crypto = new cryptr(secret);
       crypto = crypto.decrypt(cipherText);
-      if(!crypto) throw new ERRORS.ValidationError("Supplied token not valid");    
+      if(!crypto) throw new ERRORS.InvalidTokenError("Supplied token not valid");    
   
       let { plainText, expire = void 0 } = JSON.parse(crypto);
     
-      if (expire && Date.now() > expire) {
-        throw new Error('Authentication token expired');
-      }
+      if (expire && Date.now() > expire) throw new ERRORS.TokenExpiredError("Supplied token expired"); 
+      
       return plainText;
   };
 
@@ -124,9 +114,8 @@ const uploadFile = ({
   name=null, 
   limit = 5, 
   allowedFormat = ['jpg','jpeg','png','gif'], 
-  location 
+  location='/' 
 }) => {
-  if(location && process.env.STORAGE_PATH)location=process.env.STORAGE_PATH+location;
   /* Set storage to s3 */
   const storage = multer.diskStorage({
     destination: function(req, file, cb) {

@@ -42,15 +42,15 @@ class TokenExpiredError extends Error{
     constructor(message){
         super(message);
         this.name = "TOKEN_EXPIRED";
-        this.httpStatusCode = 401
+        this.httpStatusCode = 400
     }
 }
 
 class InvalidTokenError extends Error{
     constructor(message){
         super(message);
-        this.name = "INVALID_TOKEN";
-        this.httpStatusCode = 401
+        this.name = "TOKEN_INVALID";
+        this.httpStatusCode = 400
     }
 }
 
