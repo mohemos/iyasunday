@@ -176,15 +176,16 @@ module.exports = {
   NotFoundError : ERRORS.EntryNotFoundError,
   ExistsError : ERRORS.EntryExistError,
   ValidationError : ERRORS.ValidationError,
+  
   slugify : (value,lowerCase=true)=>{
     if(lowerCase)
       return Slugify(value, {
-        remove: /[*,`^#+~.()%&'"!:@]/g,
+        remove: /[*,}{》《`^#+~.()%&'"!:@]/g,
         lower : true
       });
 
     return Slugify(value, {
-      remove: /[*,`^#+~.()%&'"!:@]/g,
+      remove: /[*,}{》《`^#+~.()%&'"!:@]/g,
       lower : false
     });
   },
