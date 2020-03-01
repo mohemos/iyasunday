@@ -206,16 +206,19 @@ module.exports = {
   },
 
   /* Make a get request */
-  getContent : async({url, method='GET',headers={},token=undefined})=>{
+  getContent : async({url, method='GET',headers={},token=undefined,data=undefined})=>{
       try {
           headers['X-Requested-With'] = 'XMLHttpRequest';
           token && (headers['Authorization']=token);
-
-          const result = await Axios({
+          const payload = {
             method,
             url,
-            headers
-          });
+            headers,
+          };
+
+          if(data) payload.data = data;
+
+          const result = await Axios(payload);
       
           return result.data;
       } catch (err) {
