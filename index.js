@@ -36,12 +36,27 @@ const deleteFile = async (file)=>{
     } return false;
   };
 
-const decodeJwt = (headerToken)=>{
-  const token = headerToken.split(' ').pop();
+const decodeJwt = (cipher,secreteKey=process.env.APP_KEY)=>{
+  const token = cipher.split(' ').pop();
   return new Promise((ful, rej) => {
-    jwt.verify(token, process.env.APP_KEY, (err, data) => {
+    if(!secreteKey) return rej(new Error("Kindly supply secret key"));
+    jwt.verify(token, secreteKey, (err, data) => {
       if (err) rej(err);
       return ful(data);
+    });
+  });
+}
+
+const encodeJwt = ({
+  data,
+  secreteKey=process.env.APP_KEY,
+  duration = "24h"
+})=>{
+  return new Promise((ful, rej) => {
+    if(!secreteKey) return rej(new Error("Kindly supply secret key"));
+    jwt.sign(data, secreteKey, {expiresIn:duration},(err,token)=>{
+      if(err) rej(err);
+      ful(token);
     });
   });
 }
@@ -163,6 +178,7 @@ module.exports = {
   decrypt,
   errorMessage,
   deleteFile,
+  encodeJwt,
   decodeJwt,
   fileExists,
   removeUpload,
