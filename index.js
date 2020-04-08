@@ -70,6 +70,14 @@ const fileExists = (file)=>{
   });
 }
 
+const validate = async (schema,object,option={abortEarly:true,allowUnknown:true})=>{
+  try {
+    await schema.validateAsync(object,option);
+  } catch (err) {
+    throw new ERRORS.ValidationError(err.message);
+  }
+}
+
 const removeUpload = async(files)=>{
     if(Array.isArray(files)){
       files.map(async(image)=>await deleteFile(image.path));
@@ -183,6 +191,7 @@ module.exports = {
   fileExists,
   removeUpload,
   md5,
+  validate,
   InvalidTokenError:ERRORS.InvalidTokenError, 
   TokenExpiredError : ERRORS.TokenExpiredError, 
   AuthenticationError : ERRORS.AuthenticationError, 
@@ -359,6 +368,4 @@ module.exports = {
       return true;
     return false;
   }
-
-
 };
