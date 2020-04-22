@@ -70,7 +70,7 @@ const fileExists = (file)=>{
   });
 }
 
-const validate = async (schema,object,option={abortEarly:true,allowUnknown:true})=>{
+const validate = async (schema,object,option={abortEarly:true,allowUnknown:false})=>{
   try {
     await schema.validateAsync(object,option);
   } catch (err) {
