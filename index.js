@@ -78,6 +78,41 @@ const validate = async (schema,object,option={abortEarly:true,allowUnknown:false
   }
 }
 
+function joiValidator (constraint){
+  return async (req, res, next) => {
+    try {
+      if (constraint.body)
+        await validate(
+          constraint.body.schema,
+          req.body,
+          constraint.body.options
+        );
+      if (constraint.params)
+        await validate(
+          constraint.params.schema,
+          req.params,
+          constraint.params.options
+        );
+      if (constraint.query)
+        await validate(
+          constraint.query.schema,
+          req.query,
+          constraint.query.options
+        );
+      if (constraint.headers)
+        await validate(
+          constraint.headers.schema,
+          req.headers,
+          constraint.headers.options
+        );
+
+      return next();
+    } catch (err) {
+      return res.status(err.httpStatusCode || 400).json(errorMessage(err));
+    }
+  };
+}
+
 const removeUpload = async(files)=>{
     if(Array.isArray(files)){
       files.map(async(image)=>await deleteFile(image.path));
@@ -192,6 +227,7 @@ module.exports = {
   removeUpload,
   md5,
   validate,
+  joiValidator,
   InvalidTokenError:ERRORS.InvalidTokenError, 
   TokenExpiredError : ERRORS.TokenExpiredError, 
   AuthenticationError : ERRORS.AuthenticationError, 
