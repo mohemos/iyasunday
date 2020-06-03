@@ -36,7 +36,7 @@ class AuthorizationError extends Error{
         this.name = "AUTHORISATION_ERROR";
         this.httpStatusCode = 403
     }
-}
+} 
 
 class TokenExpiredError extends Error{
     constructor(message){
