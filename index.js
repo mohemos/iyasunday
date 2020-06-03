@@ -79,6 +79,7 @@ const validate = async (schema,object,option={abortEarly:true,allowUnknown:false
 }
 
 function joiValidator (constraint){
+  if(!constraint) throw new ERRORS.ValidationError("Kindly supply validation schema to joiValidator")
   return async (req, res, next) => {
     try {
       if (constraint.body)
@@ -228,6 +229,11 @@ module.exports = {
   md5,
   validate,
   joiValidator,
+  urlQueryToString : (query)=>{
+    let queryString='?';
+    for(let key in query) queryString+=`${key}=${query[key]}&`;
+    return queryString;
+  },
   InvalidTokenError:ERRORS.InvalidTokenError, 
   TokenExpiredError : ERRORS.TokenExpiredError, 
   AuthenticationError : ERRORS.AuthenticationError, 

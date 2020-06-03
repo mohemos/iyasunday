@@ -34,7 +34,7 @@ class AuthorizationError extends Error{
     constructor(message){
         super(message);
         this.name = "AUTHORISATION_ERROR";
-        this.httpStatusCode = 401
+        this.httpStatusCode = 403
     }
 }
 
