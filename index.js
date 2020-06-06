@@ -146,6 +146,14 @@ const uniqueString = (capitalize=false)=>{
       console.log(err);
       console.log("=======================================");
     }
+    if(err.name === 'SequelizeUniqueConstraintError'){
+      message = "Content already exists";
+      err.httpStatusCode = 409
+    } else if(err.name === 'SequelizeForeignKeyConstraintError'){
+      message = "Provided reference key does not exists";
+      err.httpStatusCode = 400
+    }
+      
     const response = { success: false, message};
     response.error = err.name || ERROR_TYPE;
     if (err.httpStatusCode) response.httpStatusCode = err.httpStatusCode;
