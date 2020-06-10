@@ -241,7 +241,7 @@ module.exports = {
   errorMessage,
   deleteFile,
   encodeJwt,
-  EncodeJwt,
+  EncodeJwt, 
   decodeJwt,
   fileExists,
   removeUpload,
