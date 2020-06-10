@@ -47,6 +47,16 @@ const decodeJwt = (cipher,secreteKey=process.env.APP_KEY)=>{
   });
 }
 
+const EncodeJwt = (data, secreteKey=process.env.APP_KEY, duration = "24h")=>{
+  return new Promise((ful, rej) => {
+    if(!secreteKey) return rej(new Error("Kindly supply secret key"));
+    jwt.sign(data, secreteKey, {expiresIn:duration},(err,token)=>{
+      if(err) rej(err);
+      ful(token);
+    });
+  });
+}
+
 const encodeJwt = ({
   data,
   secreteKey=process.env.APP_KEY,
@@ -231,6 +241,7 @@ module.exports = {
   errorMessage,
   deleteFile,
   encodeJwt,
+  EncodeJwt,
   decodeJwt,
   fileExists,
   removeUpload,
