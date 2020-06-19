@@ -82,7 +82,7 @@ const fileExists = (file)=>{
 
 const validate = async (schema,object,option={abortEarly:true,allowUnknown:false})=>{
   try {
-    await schema.validateAsync(object,option);
+    return await schema.validateAsync(object,option);
   } catch (err) {
     throw new ERRORS.ValidationError(err.message);
   }
@@ -93,25 +93,25 @@ function joiValidator (constraint){
   return async (req, res, next) => {
     try {
       if (constraint.body)
-        await validate(
+        req.body = await validate(
           constraint.body.schema,
           req.body,
           constraint.body.options
         );
       if (constraint.params)
-        await validate(
+        req.params = await validate(
           constraint.params.schema,
           req.params,
           constraint.params.options
         );
       if (constraint.query)
-        await validate(
+        req.query = await validate(
           constraint.query.schema,
           req.query,
           constraint.query.options
         );
       if (constraint.headers)
-        await validate(
+        req.headers = await validate(
           constraint.headers.schema,
           req.headers,
           constraint.headers.options
