@@ -54,6 +54,16 @@ class InvalidTokenError extends Error{
     }
 }
 
+
+const HTTP_STATUS_CODE_ERROR = {
+    "400" : "VALIDATION_ERROR",
+    "401" : "AUTHENTICATION_ERROR",
+    "403" : "AUTHORISATION_ERROR",
+    "404" : "ENTRY_NOT_FOUND",
+    "409" : "ENTRY_EXISTS",
+    "500" : "FATAL_ERROR",
+}
+
 module.exports = {
-    InvalidTokenError, TokenExpiredError, AuthenticationError, AuthorizationError,EntryExistError, EntryNotFoundError,ValidationError
+    InvalidTokenError, TokenExpiredError, AuthenticationError, AuthorizationError,EntryExistError, EntryNotFoundError,ValidationError, HTTP_STATUS_CODE_ERROR
 }

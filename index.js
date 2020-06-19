@@ -165,7 +165,9 @@ const uniqueString = (capitalize=false)=>{
     }
       
     const response = { success: false, message};
-    response.error = err.name || ERROR_TYPE;
+    response.error = err.name || 
+      ERRORS.HTTP_STATUS_CODE_ERROR[err.httpStatusCode] || 
+      ERROR_TYPE;
     if (err.httpStatusCode) response.httpStatusCode = err.httpStatusCode;
     return response;
   };
