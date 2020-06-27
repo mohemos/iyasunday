@@ -143,6 +143,15 @@ const uniqueString = (capitalize=false)=>{
     return capitalize ? result.toUpperCase() : result;
   };
 
+  const shuffelWord = (word)=>{
+	  let shuffledWord = '';
+	  word = word.split('');
+	  while (word.length > 0) {
+	    shuffledWord +=  word.splice(word.length * Math.random() << 0, 1);
+	  }
+	  return shuffledWord;
+	}
+
   const errorMessage = (err = void 0,ERROR_TYPE='FATAL_ERROR')=>{
     let message;
     if (err && err.errors) 
@@ -155,15 +164,7 @@ const uniqueString = (capitalize=false)=>{
       console.log("=======================================");
       console.log(err);
       console.log("=======================================");
-    }
-    if(err.name === 'SequelizeUniqueConstraintError'){
-      message = "Content already exists";
-      err.httpStatusCode = 409
-    } else if(err.name === 'SequelizeForeignKeyConstraintError'){
-      message = "Provided reference key does not exists";
-      err.httpStatusCode = 400
-    }
-      
+    }      
     const response = { success: false, message};
     response.error = err.name || 
       ERRORS.HTTP_STATUS_CODE_ERROR[err.httpStatusCode] || 
@@ -250,6 +251,7 @@ module.exports = {
   md5,
   validate,
   joiValidator,
+  shuffelWord,
   urlQueryToString : (query)=>{
     let queryString='?';
     for(let key in query) queryString+=`${key}=${query[key]}&`;
