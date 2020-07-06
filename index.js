@@ -359,36 +359,38 @@ module.exports = {
       return moment(date).format(format)
   },
 
-  toExcel : async ({ data, header, name="report", columnWidth=[] })=>{
-      try {
-        const workBook = new Excel.Workbook(),
-          sheet = workBook.addWorksheet(name),
-          arrayLength = data.length,
-          configColumnLength = columnWidth.length;
-    
-          for(let i=0; i < header.length; i++){
-            sheet.cell(1,(i+1)).string(`${header[i]}`);
+  toExcel : async ({ data, header, name="report", columnWidth=[], path=null })=>{
+    try {
+      const workBook = new Excel.Workbook(),
+        sheet = workBook.addWorksheet(name),
+        arrayLength = data.length,
+        configColumnLength = columnWidth.length;
+  
+        for(let i=0; i < header.length; i++){
+          sheet.cell(1,(i+1)).string(`${header[i]}`);
+        }
+  
+        for(let i=0;i<arrayLength;i++){
+          const value = Object.values(data[i]);
+  
+          for(let j=0;j<value.length;j++){ 
+            sheet.cell((i+2),j+1).string(`${value[j]}`);
           }
-    
-          for(let i=0;i<arrayLength;i++){
-            const value = Object.values(data[i]);
-    
-            for(let j=0;j<value.length;j++){
-              sheet.cell((i+2),j+1).string(`${value[j]}`);
-            }
-          }
-          
-          if( configColumnLength > 0 ){
-            columnWidth.forEach(({column,width})=>{
-              sheet.column(column).setWidth(width);
-            });
-          }
-    
-          return await workBook.writeToBuffer();
-      } catch (err) {
-        throw err;
-      }
-  },
+        }
+        
+        if( configColumnLength > 0 ){
+          columnWidth.forEach(({column,width})=>{
+            sheet.column(column).setWidth(width);
+          });
+        }
+  
+        if(path) return await workBook.write(path);
+        return await workBook.writeToBuffer();
+    } catch (err) {
+      throw err;
+    }
+},
+
   
   isFile : async(filePath)=>{
     return new Promise((resolve, reject) => {
