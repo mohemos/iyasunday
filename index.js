@@ -3,7 +3,7 @@ const {AllHtmlEntities} = require('html-entities'),
     cryptr = require('cryptr'),
     Slugify = require('slugify'),
     Axios = require('axios'),
-    {readFile} = require('fs'),
+    {readFile, writeFile} = require('fs'),
     moment = require('moment'),
     Excel = require('excel4node'),
     entities = new AllHtmlEntities(),
@@ -234,8 +234,19 @@ const uploadFile = ({
   return multer({ storage, limits, fileFilter });
 }
 
+function base64ToFile(base64String,path){
+  return new Promise((ful,rej)=>{
+    let file = base64String.replace(/^data:image\/\w+;base64,/,"");
+    writeFile(path,file,'base64',(err)=>{
+      if(err) rej(err);
+      ful(path);
+    });
+  });
+}
+
 module.exports = {
   success : true,
+  base64ToFile,
   randomString,
   uniqueString,
   uploadFile,
