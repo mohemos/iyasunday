@@ -3,7 +3,7 @@ const {AllHtmlEntities} = require('html-entities'),
     cryptr = require('cryptr'),
     Slugify = require('slugify'),
     Axios = require('axios'),
-    {readFile, writeFile} = require('fs'),
+    {readFile, writeFile, mkdir} = require('fs'),
     moment = require('moment'),
     Excel = require('excel4node'),
     entities = new AllHtmlEntities(),
@@ -35,6 +35,8 @@ const deleteFile = async (file)=>{
       });
     } return false;
   };
+
+
 
 const decodeJwt = (cipher,secreteKey=process.env.APP_KEY)=>{
   const token = cipher.split(' ').pop();
@@ -79,6 +81,18 @@ const fileExists = (file)=>{
     })
   });
 }
+
+const createPath = (path)=>new Promise((ful,rej)=>{
+  fileExists(path)
+    .then(exists=>{
+      if(exists) return ful(true);
+      mkdir(path,{recursive:true},err=>{
+        if(err) return rej(err);
+        return ful(true);
+      });
+    })
+    .catch(err=>rej(err))
+})
 
 const validate = async (schema,object,option={abortEarly:true,allowUnknown:false})=>{
   try {
@@ -198,7 +212,8 @@ const uploadFile = ({
 }) => {
   /* Set storage to s3 */
   const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: async (req, file, cb)=>{
+      await createPath(location);
       cb(null, location);
     },
     filename: (req, file, cb) => {
