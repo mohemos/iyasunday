@@ -252,10 +252,23 @@ const uploadFile = ({
 function base64ToFile(base64String,path){
   return new Promise((ful,rej)=>{
     let file = base64String.replace(/^data:image\/\w+;base64,/,"");
-    writeFile(path,file,'base64',(err)=>{
-      if(err) rej(err);
-      ful(path);
-    });
+    let format = file.charAt(0);
+    if(format === "/") format = 'jpg';
+    else if(format === 'i') format = 'png';
+    else if(format === 'R') format = 'gif';
+    else if(format === 'U') format = 'webp';
+    else if(format === 'J') format = 'pdf';
+
+    createPath(path)
+      .then(()=>{
+        path = `${path}/${uniqueString()}.${format}`
+        writeFile(path,file,'base64',(err)=>{
+          if(err) rej(err);
+          ful(path);
+        });
+      })
+      .catch(err=>rej(err));
+
   });
 }
 
