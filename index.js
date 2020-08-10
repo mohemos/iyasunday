@@ -39,7 +39,9 @@ const deleteFile = async (file)=>{
 const  pickFields = (fields = [], data = {})=> {
   let output = {};
   const totalCount = fields.length;
-  for (let i = 0; i < totalCount; i++) output[fields[i]] = data[fields[i]];
+  for (let i = 0; i < totalCount; i++){
+    if(data[fields[i]]) output[fields[i]] = data[fields[i]];
+  }
   return output;
 }
 
