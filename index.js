@@ -36,7 +36,12 @@ const deleteFile = async (file)=>{
     } return false;
   };
 
-
+const  pickFields = (fields = [], data = {})=> {
+  let output = {};
+  const totalCount = fields.length;
+  for (let i = 0; i < totalCount; i++) output[fields[i]] = data[fields[i]];
+  return output;
+}
 
 const decodeJwt = (cipher,secreteKey=process.env.APP_KEY)=>{
   const token = cipher.split(' ').pop();
@@ -258,7 +263,8 @@ function base64ToFile(base64String,path){
     else if(format === 'R') format = 'gif';
     else if(format === 'U') format = 'webp';
     else if(format === 'J') format = 'pdf';
-
+    else if(format === 'U') format = 'docx';
+    
     createPath(path)
       .then(()=>{
         path = `${path}/${uniqueString()}.${format}`
@@ -274,6 +280,7 @@ function base64ToFile(base64String,path){
 
 module.exports = {
   success : true,
+  pickFields,
   base64ToFile,
   randomString,
   uniqueString,
