@@ -1,6 +1,7 @@
-const express = require('express'),
-    app = express(),
-    {encodeJwt,decodeJwt, randomString} = require('./index');
+const express = require('express');
+const app = express();
+const http = require('http');
+const {encodeJwt,decodeJwt, randomString} = require('./index');
 
     encodeJwt({
         data : {username : "Moses", password : "peter"},
@@ -11,5 +12,5 @@ const express = require('express'),
         const data = await decodeJwt(token,"moses");
         console.log(data);
     }).catch(err=>console.log(err));
-    
+
 app.listen(9000,()=>console.log("Iya sunday now running "+randomString(10)))
