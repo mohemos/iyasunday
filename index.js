@@ -153,7 +153,7 @@ function joiValidator(constraint) {
 
       return next();
     } catch (err) {
-      return res.status(err.httpStatusCode || 400).json(errorMessage(err));
+      next(err);
     }
   };
 }
