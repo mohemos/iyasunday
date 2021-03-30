@@ -202,6 +202,8 @@ const errorMessage = (err = void 0, ERROR_TYPE = "FATAL_ERROR") => {
   response.error =
     err.name || ERRORS.HTTP_STATUS_CODE_ERROR[err.httpStatusCode] || ERROR_TYPE;
   if (err.httpStatusCode) response.httpStatusCode = err.httpStatusCode;
+  response.service =
+    err.service || process.env.APP_NAME || process.env.SERVICE_NAME;
   return response;
 };
 
