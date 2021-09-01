@@ -54,7 +54,7 @@ class InvalidTokenError extends Error{
     }
 }
 
-class PaymentRequired extends Error{
+class PaymentRequiredError extends Error{
     constructor(message){
         super(message);
         this.name = "PAYMENT_REQUIRED";
@@ -65,7 +65,7 @@ class PaymentRequired extends Error{
 const HTTP_STATUS_CODE_ERROR = {
     "400" : "VALIDATION_ERROR",
     "401" : "AUTHENTICATION_ERROR",
-    "402" : "PAYMENT_REQUIRED",
+    "402" : "PAYMENT_REQUIRED_ERROR",
     "403" : "AUTHORISATION_ERROR",
     "404" : "ENTRY_NOT_FOUND",
     "409" : "ENTRY_EXISTS",
@@ -73,5 +73,5 @@ const HTTP_STATUS_CODE_ERROR = {
 }
 
 module.exports = {
-    InvalidTokenError, TokenExpiredError, AuthenticationError, AuthorizationError,EntryExistError, EntryNotFoundError,ValidationError, PaymentRequired, HTTP_STATUS_CODE_ERROR
+    InvalidTokenError, TokenExpiredError, AuthenticationError, AuthorizationError,EntryExistError, EntryNotFoundError,ValidationError, PaymentRequiredError, HTTP_STATUS_CODE_ERROR
 }

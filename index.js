@@ -326,7 +326,7 @@ module.exports = {
   NotFoundError: ERRORS.EntryNotFoundError,
   ExistsError: ERRORS.EntryExistError,
   ValidationError: ERRORS.ValidationError,
-  PaymentRequired: ERRORS.PaymentRequired,
+  PaymentRequiredError: ERRORS.PaymentRequiredError,
 
   slugify: (value, lowerCase = true) => {
     if (lowerCase)
