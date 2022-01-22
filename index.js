@@ -5,7 +5,6 @@ const { AllHtmlEntities } = require("html-entities"),
   Axios = require("axios"),
   { readFile, writeFile, mkdir } = require("fs"),
   moment = require("moment"),
-  Excel = require("excel4node"),
   entities = new AllHtmlEntities(),
   multer = require("multer"),
   { access, unlink, F_OK } = require("fs"),
@@ -427,44 +426,6 @@ module.exports = {
 
   dateFormat: (date, format = "DD-MM-YYYY") => {
     return moment(date).format(format);
-  },
-
-  toExcel: async ({
-    data,
-    header,
-    name = "report",
-    columnWidth = [],
-    path = null,
-  }) => {
-    try {
-      const workBook = new Excel.Workbook(),
-        sheet = workBook.addWorksheet(name),
-        arrayLength = data.length,
-        configColumnLength = columnWidth.length;
-
-      for (let i = 0; i < header.length; i++) {
-        sheet.cell(1, i + 1).string(`${header[i]}`);
-      }
-
-      for (let i = 0; i < arrayLength; i++) {
-        const value = Object.values(data[i]);
-
-        for (let j = 0; j < value.length; j++) {
-          sheet.cell(i + 2, j + 1).string(`${value[j]}`);
-        }
-      }
-
-      if (configColumnLength > 0) {
-        columnWidth.forEach(({ column, width }) => {
-          sheet.column(column).setWidth(width);
-        });
-      }
-
-      if (path) return await workBook.write(path);
-      return await workBook.writeToBuffer();
-    } catch (err) {
-      throw err;
-    }
   },
 
   isFile: async (filePath) => {
