@@ -10,6 +10,7 @@
   },
   "repository": "https://github.com/mohemos/iyasunday.git",
   "author": "Moses Peter",
+  "types": "./index.d.ts",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.21.1",
