@@ -117,11 +117,15 @@ const validate = (
   return check.value;
 };
 
-function joiValidator(constraint) {
+function joiValidator(constraint, isMiddleware = true) {
   if (!constraint)
     throw new ERRORS.ValidationError(
       "Kindly supply validation schema to joiValidator"
     );
+
+  if (!isMiddleware) {
+    return validate(constraint.schema, constraint.data, constraint.option);
+  }
   return async (req, res, next) => {
     try {
       if (constraint.body) {
