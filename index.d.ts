@@ -1,70 +1,81 @@
-export type randomString = (length: number) => string;
+export declare const randomString: (length: number) => string;
 
-export type md5 = (plainText?: string) => string;
+export declare const md5: (plainText?: string) => string;
 
-export type deleteFile = (file: string) => Promise<boolean>;
+export declare const deleteFile: (file: string) => Promise<boolean>;
 
-export type pickFields = (
+export declare const pickFields: (
   fields: [string],
   data: Record<string, any>
 ) => Record<string, any>;
 
-export type decodeJwt = (cipher: string, secreteKey: string) => Promise<any>;
+export declare const decodeJwt: (
+  cipher: string,
+  secreteKey: string
+) => Promise<any>;
 
-export type EncodeJwt = (
+export declare const EncodeJwt: (
   data: any,
   secreteKey: string,
   duration: string | number
 ) => Promise<any>;
 
-export type encodeJwt = (obj: {
+export declare const encodeJwt: (obj: {
   data: any;
   secreteKey: string;
   duration: string | number;
 }) => Promise<any>;
 
-export type fileExists = (file: string) => Promise<boolean>;
+export declare const fileExists: (file: string) => Promise<boolean>;
 
-export type createPath = (path: string) => Promise<any>;
+export declare const createPath: (path: string) => Promise<any>;
 
-export type validate = (
+export declare const validate: (
   schema: any,
   object: Record<string, any>,
   option?: { abortEarly: boolean; allowUnknown: boolean }
 ) => any;
 
-export type joiValidator = (constraint: any) => Promise<any>;
+export declare const joiValidator: (constraint: any) => Promise<any>;
 
-export type removeUpload = (files: string | string[]) => Promise<boolean>;
+export declare const removeUpload: (
+  files: string | string[]
+) => Promise<boolean>;
 
-export type uniqueString = (capitalize?: boolean) => string;
+export declare const uniqueString: (capitalize?: boolean) => string;
 
-export type shuffelWord = (word: string | number) => string;
+export declare const shuffelWord: (word: string | number) => string;
 
-export type errorMessage = (
+export declare const errorMessage: (
   err: any,
   ERROR_TYPE?: string
 ) => Record<string, any>;
 
-export type decrypt = (cipherText: string, secret: string) => string;
+export declare const decrypt: (cipherText: string, secret: string) => string;
 
-export type rand = (min?: number, max?: number) => number;
+export declare const rand: (min?: number, max?: number) => number;
 
-export type uploadFile = (obj: {
+export declare const uploadFile: (obj: {
   name?: string;
   limit?: number;
   allowedFormat?: any[];
   location?: string;
 }) => any;
 
-export type base64ToFile = (base64String: string, path: string) => string;
-export type slugify = (text: string, lowerCase?: boolean) => string;
-export type htmlEncode = (value: string) => any;
-export type htmlDecode = (value: any) => any;
-export type readJson = (path: string) => Promise<Record<string, any>>;
-export type isFile = (path: string) => Promise<boolean>;
-export type dateFormat = (path: string | Date, format: string) => string;
-export type paginate = (
+export declare const base64ToFile: (
+  base64String: string,
+  path: string
+) => string;
+export declare const slugify: (text: string, lowerCase?: boolean) => string;
+export declare const htmlEncode: (value: string) => any;
+export declare const htmlDecode: (value: any) => any;
+export declare const readJson: (path: string) => Promise<Record<string, any>>;
+export declare const isFile: (path: string) => Promise<boolean>;
+export declare const dateFormat: (
+  path: string | Date,
+  format: string
+) => string;
+export declare const paginate: (
   totalCount: number,
   currentPage: number,
   perPage: number
@@ -73,13 +84,13 @@ export type paginate = (
   offset: number;
 };
 
-export type encrypt = (
+export declare const encrypt: (
   plaintext: string,
   secret: string,
   expired?: string | number
 ) => Promise<any>;
 
-export type getContent = (obj: {
+export declare const getContent: (obj: {
   url: string;
   method?: "GET" | "DELETE";
   headers?: Record<string, any>;
@@ -87,7 +98,7 @@ export type getContent = (obj: {
   data?: Record<string, any>;
 }) => Promise<any>;
 
-export type postContent = (obj: {
+export declare const postContent: (obj: {
   url: string;
   token?: string;
   data?: Record<string, any>;
@@ -95,11 +106,11 @@ export type postContent = (obj: {
   headers?: Record<string, any>;
 }) => Promise<any>;
 
-export type successMessage = (
+export declare const successMessage: (
   value: string
 ) => { success: boolean; message: string };
 
-export type urlQueryToString = (query: string) => string;
+export declare const urlQueryToString: (query: string) => string;
 export class InvalidTokenError extends Error {}
 export class TokenExpiredError extends Error {}
 export class AuthenticationError extends Error {}
