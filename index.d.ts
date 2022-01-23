@@ -36,7 +36,10 @@ export declare const validate: (
   option?: { abortEarly: boolean; allowUnknown: boolean }
 ) => any;
 
-export declare const joiValidator: (constraint: any) => Promise<any>;
+export declare const joiValidator: (
+  constraint: any,
+  isMiddleware?: boolean
+) => any;
 
 export declare const removeUpload: (
   files: string | string[]
