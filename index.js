@@ -207,6 +207,13 @@ const errorMessage = (err = void 0, ERROR_TYPE = "FATAL_ERROR") => {
   if (err.httpStatusCode) response.httpStatusCode = err.httpStatusCode;
   response.service =
     err.service || process.env.APP_NAME || process.env.SERVICE_NAME;
+
+  if(err.isAxiosError){
+    response.message = err.response.data.message || "Something went wrong";
+    response.httpStatusCode = err.response.data.httpStatusCode || err.response.status 
+    response.error = err.response.data.error || ERRORS.HTTP_STATUS_CODE_ERROR[response.httpStatusCode] || ERROR_TYPE
+  }
+
   return response;
 };
 
