@@ -26,6 +26,45 @@ const slug = Iya.slugify('Hello, World!');
 const data = await Iya.getContent({ url: 'https://api.example.com/items' });
 ```
 
+## TypeScript compatibility
+
+This package ships with type definitions (`index.d.ts`) and works out of the box in TypeScript. You can use named imports or a namespace import.
+
+```ts
+// Named imports (recommended)
+import { randomString, slugify, getContent, postContent } from 'iyasunday';
+
+async function run() {
+  const id = randomString(12);
+  const title = slugify('Hello TS!');
+
+  const list = await getContent({ url: 'https://api.example.com/items' });
+
+  const created = await postContent({
+    url: 'https://api.example.com/items',
+    data: { name: title, id },
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  console.log(created);
+}
+
+run().catch(console.error);
+```
+
+```ts
+// Alternatively, namespace import
+import * as Iya from 'iyasunday';
+
+async function main() {
+  const token = Iya.randomString(16);
+  const result = await Iya.getContent({ url: 'https://api.example.com/items' });
+  console.log(token, result);
+}
+
+main();
+```
+
 ## API Reference
 
 Below is a catalog of the available utilities. All functions are available from the package root:
@@ -93,7 +132,7 @@ Custom errors include the `httpStatusCode` property:
 
 ## Examples
 
-### File upload route (Express + Multer)
+### File upload route 
 ```js
 const express = require('express');
 const Iya = require('iyasunday');
@@ -120,7 +159,7 @@ app.post(
 );
 ```
 
-### Axios wrapper
+### HTTP Request
 ```js
 const Iya = require('iyasunday');
 
