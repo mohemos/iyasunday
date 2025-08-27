@@ -1,6 +1,6 @@
 {
   "name": "iyasunday",
-  "version": "1.1.4",
+  "version": "1.1.6",
   "description": "Utility for node.js developers",
   "main": "index.js",
   "scripts": {
