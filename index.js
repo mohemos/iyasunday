@@ -202,6 +202,7 @@ const errorMessage = (err = void 0, ERROR_TYPE = "FATAL_ERROR") => {
     console.log("=======================================");
   }
   const response = { success: false, message };
+  if (err.userId) response.userId = err.userId
   response.error =
     err.name || ERRORS.HTTP_STATUS_CODE_ERROR[err.httpStatusCode] || ERROR_TYPE;
   if (err.httpStatusCode) response.httpStatusCode = err.httpStatusCode;
@@ -389,7 +390,7 @@ module.exports = {
     } catch (err) {
       throw err.response
         ? { ...err.response.data, httpStatusCode: err.response.status } ||
-          err.response
+        err.response
         : err;
     }
   },
@@ -411,7 +412,7 @@ module.exports = {
     } catch (err) {
       throw err.response
         ? { ...err.response.data, httpStatusCode: err.response.status } ||
-          err.response
+        err.response
         : err;
     }
   },
